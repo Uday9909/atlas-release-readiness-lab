@@ -16,8 +16,12 @@ jobs:
       - name: Build image (validation only)
         run: docker build -t atlas-service:${{ github.ref_name }} .
 
-      - name: Show registry token
-        run: echo "Using token ${{ secrets.REGISTRY_TOKEN }}"
+      - name: Log in to the container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
 
   production-deploy:
     needs: release-check
